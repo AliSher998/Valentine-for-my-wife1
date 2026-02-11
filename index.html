@@ -3,363 +3,431 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>For My Queen ❤️</title>
+    <title>Our Love Story ❤️</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;600&family=Great+Vibes&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/CustomEase.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Pinyon+Script&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
     <style>
+        /* --- HIGH-END CUSTOM CSS --- */
         :root {
-            --primary-red: #ff0a54;
-            --deep-pink: #ff477e;
-            --soft-pink: #ff85a1;
-            --gold: #ffb700;
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-bg: rgba(20, 20, 20, 0.6);
+            --neon-glow: 0 0 20px rgba(255, 0, 60, 0.6);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body, html {
-            height: 100%;
-            width: 100%;
+        body {
+            background-color: #050505;
+            color: #fff;
             overflow: hidden;
-            background: #000; /* Deep background for contrast */
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Playfair Display', serif;
+            touch-action: none; /* Prevents scroll bounce on mobile */
         }
 
-        /* --- Animated Background Canvas --- */
-        #bgCanvas {
+        /* Animated Gradient Background */
+        .ambient-bg {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            background: linear-gradient(to bottom, #1a0005, #4a000e);
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, #2a0a12 0%, #000000 100%);
+            z-index: -2;
         }
 
-        /* --- Main Overlay --- */
-        .viewport {
-            position: relative;
-            height: 100%;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-        }
-
-        /* --- Music Toggle --- */
-        .music-control {
+        /* Starfield Canvas */
+        #starCanvas {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 100;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            padding: 10px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 1px solid white;
-            box-shadow: 0 0 15px var(--primary-red);
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            opacity: 0.8;
         }
 
-        /* --- Glassmorphic Card --- */
-        .main-card {
-            width: 90%;
-            max-width: 420px;
-            background: rgba(255, 255, 255, 0.1);
+        /* 3D Card Effect */
+        .tilt-card {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .glass-panel {
+            background: var(--glass-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 40px;
-            padding: 40px 20px;
-            text-align: center;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-            transform: translateY(50px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Text Gradients */
+        .gold-text {
+            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 10px rgba(191, 149, 63, 0.3);
+        }
+
+        /* Envelope Styles */
+        .envelope-wrapper {
+            perspective: 1000px;
+        }
+        .envelope {
+            transform-style: preserve-3d;
+            transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .envelope.open {
+            transform: rotateX(180deg);
             opacity: 0;
         }
 
-        .img-wrap {
-            position: relative;
-            width: 200px;
-            height: 200px;
-            margin: 0 auto 25px;
-        }
-
-        .img-wrap img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            border-radius: 20px;
-            filter: drop-shadow(0 10px 15px rgba(255, 10, 84, 0.4));
-        }
-
-        h1 {
-            font-family: 'Great Vibes', cursive;
-            color: #fff;
-            font-size: 3rem;
-            margin-bottom: 10px;
-            text-shadow: 0 0 10px var(--primary-red);
-        }
-
-        p {
-            color: #ffe5ec;
-            font-size: 1.1rem;
-            line-height: 1.6;
-            margin-bottom: 30px;
-            font-weight: 300;
-            letter-spacing: 1px;
-        }
-
-        /* --- High-End Buttons --- */
-        .btn-container {
+        /* Gallery Scroll */
+        .gallery-track {
             display: flex;
-            flex-direction: column;
-            align-items: center;
             gap: 20px;
-            min-height: 200px;
+            padding: 20px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
-
-        .btn {
-            border: none;
-            border-radius: 50px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        #yesBtn {
-            background: linear-gradient(45deg, var(--primary-red), var(--deep-pink));
-            color: white;
-            padding: 18px 50px;
-            font-size: 1.2rem;
-            box-shadow: 0 10px 30px rgba(255, 10, 84, 0.5);
-            position: relative;
-            overflow: hidden;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(255, 10, 84, 0.7); }
-            70% { box-shadow: 0 0 0 20px rgba(255, 10, 84, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 10, 84, 0); }
-        }
-
-        #noBtn {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            padding: 12px 30px;
-            font-size: 0.9rem;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            z-index: 5;
-        }
-
-        /* --- Success Screen --- */
-        .hidden { display: none; }
+        .gallery-track::-webkit-scrollbar { display: none; }
         
-        .success-content h1 {
-            font-size: 4rem;
-            background: linear-gradient(to right, #fff, var(--soft-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .gallery-item {
+            min-width: 280px;
+            height: 350px;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+        .gallery-item img {
+            width: 100%; height: 100%; object-fit: cover;
         }
 
-        .floating-message {
-            position: fixed;
-            bottom: 30px;
-            width: 100%;
-            text-align: center;
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 0.8rem;
-            z-index: 5;
+        /* Music Pulse */
+        .music-pulse {
+            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
         }
     </style>
 </head>
 <body>
 
-    <canvas id="bgCanvas"></canvas>
-    
-    <div class="music-control" id="musicToggle">
-        <span id="musicIcon">🎵</span>
+    <div class="ambient-bg"></div>
+    <canvas id="starCanvas"></canvas>
+
+    <div class="fixed top-6 right-6 z-50">
+        <button id="musicToggle" class="w-12 h-12 rounded-full glass-panel flex items-center justify-center text-white transition-all duration-300">
+            <span id="musicIcon" class="text-xl">🔇</span>
+        </button>
     </div>
-
-    <div class="viewport">
-        <div class="main-card" id="card">
-            <div class="img-wrap">
-                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1eXF5MHF4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/c76IJLufpNwSULPk77/giphy.gif" alt="Cute Cat" id="mainGif">
-            </div>
-            <h1 id="title">My Angel...</h1>
-            <p id="subtext">Every moment with you is a blessing.<br>Will you be my Valentine?</p>
-            
-            <div class="btn-container">
-                <button class="btn" id="yesBtn">Yes, Forever! ❤️</button>
-                <button class="btn" id="noBtn">No</button>
-            </div>
-        </div>
-
-        <div class="main-card hidden success-content" id="successCard">
-            <div class="img-wrap">
-                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1eXF5MHF4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/iCvtuEb9vS916K2h2I/giphy.gif" alt="Happy">
-            </div>
-            <h1>I Love You!</h1>
-            <p>You've made me the happiest person alive.<br>I promise to cherish you every single day.</p>
-        </div>
-    </div>
-
-    <div class="floating-message">Designed with love for my beautiful wife</div>
-
     <audio id="bgMusic" loop>
-        <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
+        <source src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_2901379374.mp3?filename=romantic-piano-123456.mp3" type="audio/mpeg">
     </audio>
 
+    <div id="scene-intro" class="fixed inset-0 flex flex-col items-center justify-center z-40">
+        <div class="envelope-wrapper cursor-pointer" id="envelopeBtn">
+            <div class="w-64 h-48 bg-red-900 rounded-lg shadow-2xl relative flex items-center justify-center border-2 border-red-800 envelope">
+                <div class="absolute inset-0 border-4 border-double border-yellow-600 rounded-lg opacity-30"></div>
+                <div class="text-center">
+                    <p class="font-['Cinzel'] text-yellow-500 text-xs tracking-[0.2em] mb-2">FOR MY WIFE</p>
+                    <div class="w-16 h-16 bg-red-800 rounded-full flex items-center justify-center mx-auto border border-yellow-600 shadow-inner">
+                        <span class="text-2xl">❤️</span>
+                    </div>
+                    <p class="font-['Pinyon_Script'] text-white text-xl mt-2 animate-pulse">Tap to Open</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="scene-question" class="fixed inset-0 flex items-center justify-center z-30 hidden opacity-0">
+        <div class="glass-panel w-[90%] max-w-md rounded-[40px] p-8 text-center tilt-card relative overflow-hidden">
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-32 bg-red-600 rounded-full blur-[60px] opacity-40"></div>
+            
+            <div class="relative z-10">
+                <div class="mb-6 rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1eXF5MHF4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/c76IJLufpNwSULPk77/giphy.gif" 
+                         alt="Cute Gif" class="w-full h-48 object-cover">
+                </div>
+
+                <h1 class="font-['Pinyon_Script'] text-5xl text-white mb-2 leading-tight">My Love</h1>
+                <p class="font-['Playfair_Display'] text-gray-300 mb-8 italic text-lg leading-relaxed">
+                    "In a world full of chaos,<br>you are my only peace."
+                </p>
+                
+                <p class="font-['Cinzel'] text-sm tracking-widest text-red-400 mb-6">WILL YOU BE MY VALENTINE?</p>
+
+                <div class="flex flex-col gap-4 items-center justify-center min-h-[140px] relative">
+                    <button id="yesBtn" class="bg-gradient-to-r from-red-600 to-pink-600 text-white font-bold py-4 px-12 rounded-full shadow-[0_0_20px_rgba(255,0,60,0.5)] text-lg tracking-wider transition-transform active:scale-95 z-20">
+                        YES, FOREVER
+                    </button>
+                    
+                    <button id="noBtn" class="bg-white/10 text-gray-400 font-medium py-3 px-8 rounded-full border border-white/20 text-sm backdrop-blur-md transition-all z-10">
+                        No, thanks
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="scene-gallery" class="fixed inset-0 z-20 hidden opacity-0 bg-black/80 backdrop-blur-xl overflow-y-auto">
+        <div class="min-h-screen p-6 flex flex-col items-center pt-20">
+            <h1 class="font-['Pinyon_Script'] gold-text text-6xl mb-4 text-center">She Said Yes!</h1>
+            <p class="font-['Playfair_Display'] text-white/80 text-center mb-10 max-w-sm italic">
+                You just made me the happiest person in the entire universe.
+            </p>
+
+            <div class="w-full max-w-lg">
+                <div class="gallery-track snap-x">
+                    <div class="gallery-item snap-center flex-shrink-0 bg-gray-800">
+                        <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=1000&auto=format&fit=crop" alt="Memory 1">
+                        <div class="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black to-transparent">
+                            <p class="text-white font-['Cinzel'] text-xs">OUR FIRST DATE</p>
+                        </div>
+                    </div>
+                    <div class="gallery-item snap-center flex-shrink-0 bg-gray-800">
+                        <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=1000&auto=format&fit=crop" alt="Memory 2">
+                        <div class="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black to-transparent">
+                            <p class="text-white font-['Cinzel'] text-xs">THAT TRIP WE TOOK</p>
+                        </div>
+                    </div>
+                    <div class="gallery-item snap-center flex-shrink-0 bg-gray-800">
+                        <img src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?q=80&w=1000&auto=format&fit=crop" alt="Memory 3">
+                        <div class="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black to-transparent">
+                            <p class="text-white font-['Cinzel'] text-xs">JUST US</p>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-center text-white/40 text-xs mt-4 animate-pulse">Swipe to see memories &rarr;</p>
+            </div>
+
+            <div class="mt-12 mb-10 text-center">
+                <p class="font-['Cinzel'] text-2xl mb-2 text-red-500">I LOVE YOU</p>
+                <p class="text-sm text-gray-500">Always & Forever</p>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // 1. Initialize Canvas Background
-        const canvas = document.getElementById('bgCanvas');
+        // --- 1. SETUP & UTILS ---
+        gsap.registerPlugin(CustomEase);
+        const music = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicToggle');
+        let isMusicPlaying = false;
+
+        // --- 2. AUDIO CONTROL ---
+        musicBtn.addEventListener('click', () => {
+            if (isMusicPlaying) {
+                music.pause();
+                musicBtn.classList.remove('music-pulse');
+                document.getElementById('musicIcon').innerText = '🔇';
+            } else {
+                music.play();
+                musicBtn.classList.add('music-pulse');
+                document.getElementById('musicIcon').innerText = '🎵';
+            }
+            isMusicPlaying = !isMusicPlaying;
+        });
+
+        // --- 3. BACKGROUND PARTICLES (High Performance) ---
+        const canvas = document.getElementById('starCanvas');
         const ctx = canvas.getContext('2d');
+        let width, height;
         let particles = [];
 
-        function initCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
         }
+        window.addEventListener('resize', resize);
+        resize();
 
         class Particle {
             constructor() {
-                this.reset();
-            }
-            reset() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height + canvas.height;
-                this.size = Math.random() * 5 + 2;
-                this.speed = Math.random() * 1 + 0.5;
-                this.opacity = Math.random() * 0.5 + 0.2;
-                this.type = Math.random() > 0.5 ? 'heart' : 'sparkle';
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.size = Math.random() * 2;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.alpha = Math.random();
             }
             update() {
-                this.y -= this.speed;
-                if (this.y < -20) this.reset();
-            }
-            draw() {
-                ctx.fillStyle = `rgba(255, 71, 126, ${this.opacity})`;
-                if (this.type === 'heart') {
-                    ctx.font = `${this.size * 3}px serif`;
-                    ctx.fillText('❤️', this.x, this.y);
-                } else {
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.fill();
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.alpha > 0) this.alpha -= 0.005;
+                if (this.alpha <= 0) {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.alpha = 1;
                 }
             }
-        }
-
-        for (let i = 0; i < 50; i++) particles.push(new Particle());
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => { p.update(); p.draw(); });
-            requestAnimationFrame(animate);
-        }
-
-        window.addEventListener('resize', initCanvas);
-        initCanvas();
-        animate();
-
-        // 2. Entrance Animation
-        gsap.to(".main-card", { duration: 1.5, y: 0, opacity: 1, ease: "power4.out" });
-
-        // 3. Logic for Buttons
-        const noBtn = document.getElementById('noBtn');
-        const yesBtn = document.getElementById('yesBtn');
-        const card = document.getElementById('card');
-        const successCard = document.getElementById('successCard');
-        const subtext = document.getElementById('subtext');
-        
-        let yesScale = 1;
-        const messages = [
-            "Are you really sure? 🥺",
-            "But I bought chocolates! 🍫",
-            "I'll be very sad... 😭",
-            "Is that your final answer?",
-            "Just click the big pink button!",
-            "You're breaking my heart! 💔"
-        ];
-        let msgIndex = 0;
-
-        const moveNo = () => {
-            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-            
-            gsap.to(noBtn, { 
-                position: 'fixed', 
-                left: x, 
-                top: y, 
-                duration: 0.3, 
-                ease: "power2.out" 
-            });
-
-            yesScale += 0.35;
-            gsap.to(yesBtn, { scale: yesScale, duration: 0.3 });
-            
-            if (msgIndex < messages.length) {
-                subtext.innerHTML = messages[msgIndex];
-                msgIndex++;
+            draw() {
+                ctx.fillStyle = `rgba(255, 100, 100, ${this.alpha})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
             }
-        };
+        }
 
-        noBtn.addEventListener('mouseover', moveNo);
-        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveNo(); });
+        for (let i = 0; i < 80; i++) particles.push(new Particle());
 
-        yesBtn.addEventListener('click', () => {
-            gsap.to(card, { duration: 0.8, opacity: 0, scale: 0.5, display: 'none', onComplete: () => {
-                successCard.classList.remove('hidden');
-                gsap.from(successCard, { duration: 1, scale: 0, opacity: 0, ease: "back.out(1.7)" });
-                fireConfetti();
+        function animateBg() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animateBg);
+        }
+        animateBg();
+
+        // --- 4. SCENE TRANSITIONS ---
+        
+        // Open Envelope
+        document.getElementById('envelopeBtn').addEventListener('click', () => {
+            // Animate envelope opening
+            gsap.to('.envelope', { rotationX: 180, duration: 0.8, ease: 'back.in(1.7)' });
+            gsap.to('#scene-intro', { opacity: 0, scale: 1.5, duration: 0.8, delay: 0.4, onComplete: () => {
+                document.getElementById('scene-intro').style.display = 'none';
+                document.getElementById('scene-question').style.display = 'flex';
+                
+                // Show Card with GSAP
+                gsap.to('#scene-question', { opacity: 1, duration: 1 });
+                gsap.from('.tilt-card', { y: 100, opacity: 0, duration: 1.2, ease: 'power3.out' });
+                
+                // Try to auto-play music (might be blocked by browser, but worth a try)
+                music.volume = 0.5;
+                music.play().then(() => {
+                    isMusicPlaying = true;
+                    musicBtn.classList.add('music-pulse');
+                    document.getElementById('musicIcon').innerText = '🎵';
+                }).catch(e => console.log("Auto-play prevented"));
             }});
         });
 
-        // 4. Music Logic
-        const music = document.getElementById('bgMusic');
-        const musicToggle = document.getElementById('musicToggle');
-        let isPlaying = false;
+        // --- 5. THE "NO" BUTTON PHYSICS (MAGNETIC EVASION) ---
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const card = document.querySelector('.tilt-card');
+        const btnContainer = noBtn.parentElement;
 
-        musicToggle.addEventListener('click', () => {
-            if (!isPlaying) {
-                music.play();
-                document.getElementById('musicIcon').innerHTML = "❤️";
-                gsap.to(musicToggle, { scale: 1.2, repeat: -1, yoyo: true });
-            } else {
-                music.pause();
-                document.getElementById('musicIcon').innerHTML = "🎵";
-                gsap.set(musicToggle, { scale: 1 });
+        // Function to move button away from pointer
+        function evade(e) {
+            const rect = noBtn.getBoundingClientRect();
+            const containerRect = btnContainer.getBoundingClientRect();
+            
+            // Get pointer position (touch or mouse)
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+            const btnCenterX = rect.left + rect.width / 2;
+            const btnCenterY = rect.top + rect.height / 2;
+
+            const dist = Math.hypot(clientX - btnCenterX, clientY - btnCenterY);
+
+            // If closer than 100px, move away
+            if (dist < 100) {
+                const angle = Math.atan2(clientY - btnCenterY, clientX - btnCenterX);
+                const moveDist = 80; // how far it jumps
+                
+                // Calculate new position relative to current
+                let newX = Math.cos(angle + Math.PI) * moveDist;
+                let newY = Math.sin(angle + Math.PI) * moveDist;
+
+                gsap.to(noBtn, {
+                    x: `+=${newX}`,
+                    y: `+=${newY}`,
+                    duration: 0.3,
+                    ease: 'power2.out'
+                });
+                
+                // Grow Yes Button
+                gsap.to(yesBtn, { scale: '+=0.1', duration: 0.3 });
             }
-            isPlaying = !isPlaying;
+        }
+
+        document.addEventListener('mousemove', evade);
+        document.addEventListener('touchmove', evade, { passive: false });
+        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); evade(e); });
+
+
+        // --- 6. THE "YES" CELEBRATION ---
+        yesBtn.addEventListener('click', () => {
+            // 1. Hide Question
+            gsap.to('#scene-question', { scale: 0.8, opacity: 0, duration: 0.5, onComplete: () => {
+                 document.getElementById('scene-question').style.display = 'none';
+                 document.getElementById('scene-gallery').style.display = 'block';
+                 
+                 // 2. Show Gallery
+                 gsap.to('#scene-gallery', { opacity: 1, duration: 1 });
+                 gsap.from('.gallery-item', { 
+                     y: 50, 
+                     opacity: 0, 
+                     stagger: 0.2, 
+                     duration: 1, 
+                     ease: 'power3.out' 
+                 });
+
+                 // 3. Massive Confetti
+                 const duration = 5000;
+                 const end = Date.now() + duration;
+
+                 (function frame() {
+                    confetti({
+                        particleCount: 5,
+                        angle: 60,
+                        spread: 55,
+                        origin: { x: 0 },
+                        colors: ['#ff0000', '#ffaaaa', '#ffeb3b']
+                    });
+                    confetti({
+                        particleCount: 5,
+                        angle: 120,
+                        spread: 55,
+                        origin: { x: 1 },
+                        colors: ['#ff0000', '#ffaaaa', '#ffeb3b']
+                    });
+
+                    if (Date.now() < end) {
+                        requestAnimationFrame(frame);
+                    }
+                 }());
+            }});
         });
 
-        // 5. Confetti Finale
-        function fireConfetti() {
-            const count = 200;
-            const defaults = { origin: { y: 0.7 } };
-
-            function fire(particleRatio, opts) {
-                confetti(Object.assign({}, defaults, opts, {
-                    particleCount: Math.floor(count * particleRatio)
-                }));
+        // --- 7. 3D TILT EFFECT (For Mobile Accelerometer) ---
+        window.addEventListener("deviceorientation", (event) => {
+            const tiltX = event.beta;  // (-180 to 180)
+            const tiltY = event.gamma; // (-90 to 90)
+            
+            // Limit tilt for subtle effect
+            if (window.innerWidth < 768) {
+                gsap.to('.tilt-card', {
+                    rotationX: tiltX / 2, // Up/Down tilt
+                    rotationY: tiltY / 2, // Left/Right tilt
+                    duration: 0.5,
+                    ease: 'power2.out'
+                });
             }
+        });
+        
+        // Mouse tilt for desktop testing
+        document.addEventListener('mousemove', (e) => {
+            if (window.innerWidth >= 768) {
+                const x = (e.clientX / window.innerWidth - 0.5) * 20;
+                const y = (e.clientY / window.innerHeight - 0.5) * 20;
+                gsap.to('.tilt-card', {
+                    rotationY: x,
+                    rotationX: -y,
+                    duration: 0.5
+                });
+            }
+        });
 
-            fire(0.25, { spread: 26, startVelocity: 55 });
-            fire(0.2, { spread: 60 });
-            fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
-            fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
-            fire(0.1, { spread: 120, startVelocity: 45 });
-        }
     </script>
 </body>
-</html>
+    </html>
+    
