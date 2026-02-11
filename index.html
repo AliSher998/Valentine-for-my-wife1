@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For My Beautiful Wife ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-pink: #ff4d6d;
+            --secondary-pink: #ff758f;
+            --bg-gradient: linear-gradient(135deg, #ffe5ec 0%, #ffb3c1 100%);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--bg-gradient);
+            font-family: 'Quicksand', sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* --- Background Floating Hearts --- */
+        .heart-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .floating-heart {
+            position: absolute;
+            color: var(--primary-pink);
+            opacity: 0.3;
+            animation: float 6s infinite linear;
+            font-size: 20px;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.4; }
+            80% { opacity: 0.4; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* --- Main Card --- */
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 40px 30px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.2);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            z-index: 10;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.5s ease;
+        }
+
+        .gif-container {
+            width: 100%;
+            height: 180px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .gif-container img {
+            height: 100%;
+            border-radius: 15px;
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            color: #c9184a;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #a4133c;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+
+        /* --- Buttons --- */
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+            min-height: 150px;
+        }
+
+        button {
+            border: none;
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #yesBtn {
+            background: var(--primary-pink);
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            box-shadow: 0 10px 20px rgba(255, 77, 109, 0.3);
+            z-index: 100;
+        }
+
+        #yesBtn:active {
+            transform: scale(0.95);
+        }
+
+        #noBtn {
+            background: #fff;
+            color: #6c757d;
+            padding: 10px 25px;
+            font-size: 0.9rem;
+            border-radius: 50px;
+            border: 1px solid #dee2e6;
+        }
+
+        /* --- Success Screen --- */
+        .hidden {
+            display: none !important;
+        }
+
+        #successMessage h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .heart-beat {
+            font-size: 50px;
+            color: var(--primary-pink);
+            animation: beat 0.8s infinite alternate;
+            margin: 20px 0;
+        }
+
+        @keyframes beat {
+            from { transform: scale(1); }
+            to { transform: scale(1.3); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="heart-bg" id="heartBg"></div>
+
+    <div class="card" id="mainCard">
+        <div class="gif-container">
+            <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1eXF5MHF4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/c76IJLufpNwSULPk77/giphy.gif" alt="Asking">
+        </div>
+        <h1 id="questionText">My Dearest Wife...</h1>
+        <p>Will you be my Valentine? ❤️</p>
+        
+        <div class="btn-group">
+            <button id="yesBtn">YES!</button>
+            <button id="noBtn">No</button>
+        </div>
+    </div>
+
+    <div class="card hidden" id="successCard">
+        <div class="gif-container">
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1eXF5MHF4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/iCvtuEb9vS916K2h2I/giphy.gif" alt="Yay">
+        </div>
+        <h1>I Knew It! 😍</h1>
+        <div class="heart-beat">❤️</div>
+        <p>I am the luckiest person in the world. I love you forever!</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const mainCard = document.getElementById('mainCard');
+        const successCard = document.getElementById('successCard');
+        const heartBg = document.getElementById('heartBg');
+
+        let yesScale = 1;
+        let noClickCount = 0;
+
+        const messages = [
+            "Are you sure?",
+            "Think again! 🥺",
+            "Pleeaaaseeee?",
+            "I'll give you chocolate! 🍫",
+            "I'm gonna cry... 😭",
+            "But look at this face! 🐱",
+            "Okay, now you're being mean!",
+            "Click the BIG PINK BUTTON!"
+        ];
+
+        // 1. Create floating hearts background
+        function createHearts() {
+            const symbols = ['❤️', '💖', '💗', '💕', '🌸'];
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'floating-heart';
+                    heart.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                    heartBg.appendChild(heart);
+                    
+                    // Remove heart after animation
+                    setTimeout(() => heart.remove(), 7000);
+                }, i * 300);
+            }
+        }
+        setInterval(createHearts, 3000);
+        createHearts();
+
+        // 2. The "No" button logic
+        function handleNo() {
+            noClickCount++;
+            
+            // Move the button randomly
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+            
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+
+            // Make the YES button bigger!
+            yesScale += 0.4;
+            yesBtn.style.transform = `scale(${yesScale})`;
+            
+            // Change text to try and convince her
+            if (noClickCount < messages.length) {
+                noBtn.innerHTML = messages[noClickCount];
+            } else {
+                noBtn.innerHTML = "Just say YES! 😂";
+            }
+        }
+
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            handleNo();
+        });
+        noBtn.addEventListener('mouseover', handleNo);
+
+        // 3. The "Yes" button logic
+        yesBtn.addEventListener('click', () => {
+            mainCard.classList.add('hidden');
+            successCard.classList.remove('hidden');
+            
+            // Fire premium confetti
+            var duration = 5 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function randomInRange(min, max) {
+              return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function() {
+              var timeLeft = animationEnd - Date.now();
+
+              if (timeLeft <= 0) {
+                return clearInterval(interval);
+              }
+
+              var particleCount = 50 * (timeLeft / duration);
+              confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+              confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        });
+    </script>
+</body>
+</html>
