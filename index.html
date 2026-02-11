@@ -3,15 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>For My Beautiful Wife ❤️</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@300;500;700&display=swap" rel="stylesheet">
+    <title>For My Queen ❤️</title>
     
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;600&family=Great+Vibes&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
     <style>
         :root {
-            --primary-pink: #ff4d6d;
-            --secondary-pink: #ff758f;
-            --bg-gradient: linear-gradient(135deg, #ffe5ec 0%, #ffb3c1 100%);
-            --glass-bg: rgba(255, 255, 255, 0.8);
+            --primary-red: #ff0a54;
+            --deep-pink: #ff477e;
+            --soft-pink: #ff85a1;
+            --gold: #ffb700;
         }
 
         * {
@@ -21,276 +24,342 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        body {
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: var(--bg-gradient);
-            font-family: 'Quicksand', sans-serif;
+        body, html {
+            height: 100%;
+            width: 100%;
             overflow: hidden;
-            position: relative;
+            background: #000; /* Deep background for contrast */
+            font-family: 'Montserrat', sans-serif;
         }
 
-        /* --- Background Floating Hearts --- */
-        .heart-bg {
-            position: absolute;
+        /* --- Animated Background Canvas --- */
+        #bgCanvas {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 0;
-            pointer-events: none;
+            z-index: 1;
+            background: linear-gradient(to bottom, #1a0005, #4a000e);
         }
 
-        .floating-heart {
-            position: absolute;
-            color: var(--primary-pink);
-            opacity: 0.3;
-            animation: float 6s infinite linear;
-            font-size: 20px;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-            20% { opacity: 0.4; }
-            80% { opacity: 0.4; }
-            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
-        }
-
-        /* --- Main Card --- */
-        .card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            padding: 40px 30px;
-            border-radius: 30px;
-            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.2);
-            text-align: center;
-            width: 90%;
-            max-width: 400px;
-            z-index: 10;
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            transition: all 0.5s ease;
-        }
-
-        .gif-container {
+        /* --- Main Overlay --- */
+        .viewport {
+            position: relative;
+            height: 100%;
             width: 100%;
-            height: 180px;
-            margin-bottom: 20px;
             display: flex;
             justify-content: center;
+            align-items: center;
+            z-index: 10;
         }
 
-        .gif-container img {
+        /* --- Music Toggle --- */
+        .music-control {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 1px solid white;
+            box-shadow: 0 0 15px var(--primary-red);
+        }
+
+        /* --- Glassmorphic Card --- */
+        .main-card {
+            width: 90%;
+            max-width: 420px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 40px;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            transform: translateY(50px);
+            opacity: 0;
+        }
+
+        .img-wrap {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 25px;
+        }
+
+        .img-wrap img {
+            width: 100%;
             height: 100%;
-            border-radius: 15px;
+            object-fit: contain;
+            border-radius: 20px;
+            filter: drop-shadow(0 10px 15px rgba(255, 10, 84, 0.4));
         }
 
         h1 {
-            font-family: 'Dancing Script', cursive;
-            color: #c9184a;
-            font-size: 2.2rem;
+            font-family: 'Great Vibes', cursive;
+            color: #fff;
+            font-size: 3rem;
             margin-bottom: 10px;
+            text-shadow: 0 0 10px var(--primary-red);
         }
 
         p {
-            color: #a4133c;
+            color: #ffe5ec;
             font-size: 1.1rem;
+            line-height: 1.6;
             margin-bottom: 30px;
-            font-weight: 500;
+            font-weight: 300;
+            letter-spacing: 1px;
         }
 
-        /* --- Buttons --- */
-        .btn-group {
+        /* --- High-End Buttons --- */
+        .btn-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 15px;
-            position: relative;
-            min-height: 150px;
+            gap: 20px;
+            min-height: 200px;
         }
 
-        button {
+        .btn {
             border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
             cursor: pointer;
-            font-family: 'Quicksand', sans-serif;
-            font-weight: 700;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.3s ease;
         }
 
         #yesBtn {
-            background: var(--primary-pink);
+            background: linear-gradient(45deg, var(--primary-red), var(--deep-pink));
             color: white;
-            padding: 15px 40px;
+            padding: 18px 50px;
             font-size: 1.2rem;
-            border-radius: 50px;
-            box-shadow: 0 10px 20px rgba(255, 77, 109, 0.3);
-            z-index: 100;
+            box-shadow: 0 10px 30px rgba(255, 10, 84, 0.5);
+            position: relative;
+            overflow: hidden;
+            animation: pulse 2s infinite;
         }
 
-        #yesBtn:active {
-            transform: scale(0.95);
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 10, 84, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(255, 10, 84, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 10, 84, 0); }
         }
 
         #noBtn {
-            background: #fff;
-            color: #6c757d;
-            padding: 10px 25px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 12px 30px;
             font-size: 0.9rem;
-            border-radius: 50px;
-            border: 1px solid #dee2e6;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            z-index: 5;
         }
 
         /* --- Success Screen --- */
-        .hidden {
-            display: none !important;
+        .hidden { display: none; }
+        
+        .success-content h1 {
+            font-size: 4rem;
+            background: linear-gradient(to right, #fff, var(--soft-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        #successMessage h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
+        .floating-message {
+            position: fixed;
+            bottom: 30px;
+            width: 100%;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.8rem;
+            z-index: 5;
         }
-
-        .heart-beat {
-            font-size: 50px;
-            color: var(--primary-pink);
-            animation: beat 0.8s infinite alternate;
-            margin: 20px 0;
-        }
-
-        @keyframes beat {
-            from { transform: scale(1); }
-            to { transform: scale(1.3); }
-        }
-
     </style>
 </head>
 <body>
 
-    <div class="heart-bg" id="heartBg"></div>
+    <canvas id="bgCanvas"></canvas>
+    
+    <div class="music-control" id="musicToggle">
+        <span id="musicIcon">🎵</span>
+    </div>
 
-    <div class="card" id="mainCard">
-        <div class="gif-container">
-            <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1eXF5MHF4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/c76IJLufpNwSULPk77/giphy.gif" alt="Asking">
+    <div class="viewport">
+        <div class="main-card" id="card">
+            <div class="img-wrap">
+                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1eXF5MHF4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/c76IJLufpNwSULPk77/giphy.gif" alt="Cute Cat" id="mainGif">
+            </div>
+            <h1 id="title">My Angel...</h1>
+            <p id="subtext">Every moment with you is a blessing.<br>Will you be my Valentine?</p>
+            
+            <div class="btn-container">
+                <button class="btn" id="yesBtn">Yes, Forever! ❤️</button>
+                <button class="btn" id="noBtn">No</button>
+            </div>
         </div>
-        <h1 id="questionText">My Dearest Wife...</h1>
-        <p>Will you be my Valentine? ❤️</p>
-        
-        <div class="btn-group">
-            <button id="yesBtn">YES!</button>
-            <button id="noBtn">No</button>
+
+        <div class="main-card hidden success-content" id="successCard">
+            <div class="img-wrap">
+                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1eXF5MHF4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/iCvtuEb9vS916K2h2I/giphy.gif" alt="Happy">
+            </div>
+            <h1>I Love You!</h1>
+            <p>You've made me the happiest person alive.<br>I promise to cherish you every single day.</p>
         </div>
     </div>
 
-    <div class="card hidden" id="successCard">
-        <div class="gif-container">
-            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp1eXF5MHF4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4eHJ4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/iCvtuEb9vS916K2h2I/giphy.gif" alt="Yay">
-        </div>
-        <h1>I Knew It! 😍</h1>
-        <div class="heart-beat">❤️</div>
-        <p>I am the luckiest person in the world. I love you forever!</p>
-    </div>
+    <div class="floating-message">Designed with love for my beautiful wife</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <audio id="bgMusic" loop>
+        <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
+    </audio>
 
     <script>
-        const noBtn = document.getElementById('noBtn');
-        const yesBtn = document.getElementById('yesBtn');
-        const mainCard = document.getElementById('mainCard');
-        const successCard = document.getElementById('successCard');
-        const heartBg = document.getElementById('heartBg');
+        // 1. Initialize Canvas Background
+        const canvas = document.getElementById('bgCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
 
-        let yesScale = 1;
-        let noClickCount = 0;
+        function initCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
 
-        const messages = [
-            "Are you sure?",
-            "Think again! 🥺",
-            "Pleeaaaseeee?",
-            "I'll give you chocolate! 🍫",
-            "I'm gonna cry... 😭",
-            "But look at this face! 🐱",
-            "Okay, now you're being mean!",
-            "Click the BIG PINK BUTTON!"
-        ];
-
-        // 1. Create floating hearts background
-        function createHearts() {
-            const symbols = ['❤️', '💖', '💗', '💕', '🌸'];
-            for (let i = 0; i < 20; i++) {
-                setTimeout(() => {
-                    const heart = document.createElement('div');
-                    heart.className = 'floating-heart';
-                    heart.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
-                    heart.style.left = Math.random() * 100 + 'vw';
-                    heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
-                    heartBg.appendChild(heart);
-                    
-                    // Remove heart after animation
-                    setTimeout(() => heart.remove(), 7000);
-                }, i * 300);
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height + canvas.height;
+                this.size = Math.random() * 5 + 2;
+                this.speed = Math.random() * 1 + 0.5;
+                this.opacity = Math.random() * 0.5 + 0.2;
+                this.type = Math.random() > 0.5 ? 'heart' : 'sparkle';
+            }
+            update() {
+                this.y -= this.speed;
+                if (this.y < -20) this.reset();
+            }
+            draw() {
+                ctx.fillStyle = `rgba(255, 71, 126, ${this.opacity})`;
+                if (this.type === 'heart') {
+                    ctx.font = `${this.size * 3}px serif`;
+                    ctx.fillText('❤️', this.x, this.y);
+                } else {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
             }
         }
-        setInterval(createHearts, 3000);
-        createHearts();
 
-        // 2. The "No" button logic
-        function handleNo() {
-            noClickCount++;
-            
-            // Move the button randomly
+        for (let i = 0; i < 50; i++) particles.push(new Particle());
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', initCanvas);
+        initCanvas();
+        animate();
+
+        // 2. Entrance Animation
+        gsap.to(".main-card", { duration: 1.5, y: 0, opacity: 1, ease: "power4.out" });
+
+        // 3. Logic for Buttons
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const card = document.getElementById('card');
+        const successCard = document.getElementById('successCard');
+        const subtext = document.getElementById('subtext');
+        
+        let yesScale = 1;
+        const messages = [
+            "Are you really sure? 🥺",
+            "But I bought chocolates! 🍫",
+            "I'll be very sad... 😭",
+            "Is that your final answer?",
+            "Just click the big pink button!",
+            "You're breaking my heart! 💔"
+        ];
+        let msgIndex = 0;
+
+        const moveNo = () => {
             const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
             const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
             
-            noBtn.style.position = 'fixed';
-            noBtn.style.left = x + 'px';
-            noBtn.style.top = y + 'px';
+            gsap.to(noBtn, { 
+                position: 'fixed', 
+                left: x, 
+                top: y, 
+                duration: 0.3, 
+                ease: "power2.out" 
+            });
 
-            // Make the YES button bigger!
-            yesScale += 0.4;
-            yesBtn.style.transform = `scale(${yesScale})`;
+            yesScale += 0.35;
+            gsap.to(yesBtn, { scale: yesScale, duration: 0.3 });
             
-            // Change text to try and convince her
-            if (noClickCount < messages.length) {
-                noBtn.innerHTML = messages[noClickCount];
-            } else {
-                noBtn.innerHTML = "Just say YES! 😂";
+            if (msgIndex < messages.length) {
+                subtext.innerHTML = messages[msgIndex];
+                msgIndex++;
             }
-        }
+        };
 
-        noBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            handleNo();
-        });
-        noBtn.addEventListener('mouseover', handleNo);
+        noBtn.addEventListener('mouseover', moveNo);
+        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveNo(); });
 
-        // 3. The "Yes" button logic
         yesBtn.addEventListener('click', () => {
-            mainCard.classList.add('hidden');
-            successCard.classList.remove('hidden');
-            
-            // Fire premium confetti
-            var duration = 5 * 1000;
-            var animationEnd = Date.now() + duration;
-            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+            gsap.to(card, { duration: 0.8, opacity: 0, scale: 0.5, display: 'none', onComplete: () => {
+                successCard.classList.remove('hidden');
+                gsap.from(successCard, { duration: 1, scale: 0, opacity: 0, ease: "back.out(1.7)" });
+                fireConfetti();
+            }});
+        });
 
-            function randomInRange(min, max) {
-              return Math.random() * (max - min) + min;
+        // 4. Music Logic
+        const music = document.getElementById('bgMusic');
+        const musicToggle = document.getElementById('musicToggle');
+        let isPlaying = false;
+
+        musicToggle.addEventListener('click', () => {
+            if (!isPlaying) {
+                music.play();
+                document.getElementById('musicIcon').innerHTML = "❤️";
+                gsap.to(musicToggle, { scale: 1.2, repeat: -1, yoyo: true });
+            } else {
+                music.pause();
+                document.getElementById('musicIcon').innerHTML = "🎵";
+                gsap.set(musicToggle, { scale: 1 });
+            }
+            isPlaying = !isPlaying;
+        });
+
+        // 5. Confetti Finale
+        function fireConfetti() {
+            const count = 200;
+            const defaults = { origin: { y: 0.7 } };
+
+            function fire(particleRatio, opts) {
+                confetti(Object.assign({}, defaults, opts, {
+                    particleCount: Math.floor(count * particleRatio)
+                }));
             }
 
-            var interval = setInterval(function() {
-              var timeLeft = animationEnd - Date.now();
-
-              if (timeLeft <= 0) {
-                return clearInterval(interval);
-              }
-
-              var particleCount = 50 * (timeLeft / duration);
-              confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
-              confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
-            }, 250);
-        });
+            fire(0.25, { spread: 26, startVelocity: 55 });
+            fire(0.2, { spread: 60 });
+            fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+            fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+            fire(0.1, { spread: 120, startVelocity: 45 });
+        }
     </script>
 </body>
 </html>
